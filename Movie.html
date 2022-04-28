@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        *{
+    background-color: black;
+
+        }
+        #MovesDetail{
+    display: flex;
+    width: 90%;
+    margin: auto;
+    background-color: black;
+    color: white;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+#imgsection{
+    width: 30%;
+}
+      #detail {
+        width: 70%;
+        padding: 15px;
+      }
+      #detail > p {
+        padding-top: 20px;
+        font-size: 22px;
+      }
+    </style>
+    <title>Movie</title>
+  </head>
+  <body>
+    <div id="MovesDetail" >
+        <div id="imgsection">
+       <img id="poster">
+       </div>
+
+    <div id="detail">
+      <h3 id="Name"></h3>
+      <p id="Actors"></p>
+      <p id="Director"></p>
+      <p id="runtime"></p>
+      <p id="Released"></p>
+      <p id="dsc"></p>
+      <p id="imdbRating"></p>
+      <p id="Writer"></p>
+    </div>
+  </body>
+</html>
+<script>
+        let local=JSON.parse(localStorage.getItem("Movie"))||[]
+  
+        var moves=local.Title;
+    fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=5112ef64&t=${moves}`)
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (res) {
+          console.log(res)
+          if(res.Title==undefined){
+              document.getElementById("MovesDetail").innerHTML='<img src="Error.gif" style="width: 100%;">'
+          }else{
+              document.getElementById("poster").src=res.Poster
+              document.getElementById("Name").innerText=`Name: ${res.Title}`
+              document.getElementById("Actors").innerText=`Actors: ${res.Actors}`
+              document.getElementById("Director").innerText=`Director: ${res.Director}`
+              document.getElementById("runtime").innerText=`Runtime: ${res.Runtime}`
+              document.getElementById("Released").innerText=`Released: ${res.Released}`
+              document.getElementById("dsc").innerText=`Description: ${res.Plot}`
+              if(res.imdbRating>8.5){
+                  document.getElementById("imdbRating").innerText=`Rating: ${res.imdbRating} Recommended `
+                }else{
+                    document.getElementById("imdbRating").innerText=`Rating: ${res.imdbRating}`
+                }
+                document.getElementById("Writer").innerText=`Writer: ${res.Writer}`
+            }
+      })
+      .catch(function (err) {
+        console.log(err);
+        document.getElementById("MovesDetail").innerHTML=""
+      });
+        localStorage.removeItem()
+
+</script>
